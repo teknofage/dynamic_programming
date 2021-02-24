@@ -41,7 +41,17 @@ def lcs_dp(strA, strB):
 def knapsack(items, capacity):
     """Return the maximum value that can be stored in the knapsack using the
     items given."""
-    pass
+    if len(items) == 0 or capacity == 0:
+        return 0
+    
+    item_value = items[0][1]
+    item_weight = items[0][2]
+    
+    first_item = items[0]
+    value_with = first_item[2] + knapsack(items[1:], capacity - item_weight)
+    value_without = (items[1:], capacity)
+          
+    return max(value_with, value_without)
 
 def knapsack_dp(items, capacity):
     """Return the maximum value that can be stored in the knapsack using the
