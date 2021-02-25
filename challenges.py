@@ -53,6 +53,7 @@ def knapsack(items, capacity):
           
     return max(value_with, value_without)
 
+
 def knapsack_dp(items, capacity):
     """Return the maximum value that can be stored in the knapsack using the
     items given."""
@@ -64,9 +65,29 @@ def knapsack_dp(items, capacity):
 
     return dp_table[rows-1][cols-1]
     
+    
 def edit_distance(str1, str2):
     """Compute the Edit Distance between 2 strings."""
-    pass
+    if not str1 and not str2:
+        return 0
+    if not str1:
+        return len(str2)
+    if not str2:
+        return len(str1)
+        
+    # If last characters match
+    if str1[-1] == str2[-1]:
+        return edit_distance(str1[:-1], str2[:-1])
+
+    # If last characters are not identical, consider all three
+    # operations on last character of first string, recursively
+    # compute minimum cost for all three operations and take
+    # minimum of three values.
+    return 1 + min(edit_distance(str1, str2[:-1]),      # Insert
+                   edit_distance(str1[:-1], str2),       # Remove
+                   edit_distance(str1[:-1], str2[:-1])   # Replace
+                )
+
 
 def edit_distance_dp(str1, str2):
     """Compute the Edit Distance between 2 strings."""
@@ -77,3 +98,31 @@ def edit_distance_dp(str1, str2):
     # TODO: Fill in the table using a nested for loop.
 
     return dp_table[rows-1][cols-1]
+
+
+# rows = len(str1) + 1
+    # cols = len(str2) + 1
+    # dp_table = [[0 for j in range(cols)] for i in range(rows)]
+
+    # if len(str1) == 0 and len(str2) == 0:
+    #     return 0
+    # if len(str1) == 0:
+    #     return len(str2)
+    # if len(str2) == 0:
+    #     return len(str1)
+
+    # # If last characters match
+    # if str1[:-1] == str2[:]:
+    #     return edit_distance_dp(str1[:-1], str2[:-1])
+ 
+    # # If last characters are not same, consider all three
+    # # operations on last character of first string, recursively
+    # # compute minimum cost for all three operations and take
+    # # minimum of three values.
+    # return 1 + min(edit_distance_dp(str1, str2[:-1]),   # Insert
+    #                edit_distance_dp(str1[:-1], str2),   # Remove
+    #                edit_distance_dp(str1[:-1], str2[:-1])   # Replace
+    #             )
+    # # TODO: Fill in the table using a nested for loop.
+
+    # return dp_table[rows-1][cols-1]
