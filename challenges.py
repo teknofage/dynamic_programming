@@ -67,38 +67,53 @@ def knapsack_dp(items, capacity):
     cols = capacity + 1
     dp_table = [[0 for col in range(cols)] for irow in range(rows)]
     
-
     # TODO: Fill in the table using a nested for loop.
-    for row in range(rows - 1):
-        for col in range(cols - 1):
+    for row in range(rows ):
+        for col in range(cols):
             item_value = items[row-1][2]
             item_weight = items[row-1][1]
+            current_capacity = col
+            diff = current_capacity - item_weight
             
             if row == 0 or col == 0:
                 dp_table[row][col] = 0
             # if the item fits in the knapsack
-            current_capacity = col
-            diff = current_capacity - item_weight
-            if diff >= 0:
-                # include it
-                    # two table lookups
-                    # check what is above it in the col
-                    # either change the value to the number above it 
-                    # or subtract the weight from the capacity and  
-                    # check the resulting capacity column for the value 
-                    # pick the max value of the two
-                dp_table[row][col] = max(dp_table[col][row - 1], dp_table[row][diff])
-            # if it doesn't fit in the knapsack
+            
+            if current_capacity >= item_weight:
+                value_with = item_value + dp_table[row-1][current_capacity - item_weight]
             else:
-                # don't include it
-                # one table lookup
-                # check the number in in the row above (same column)
-                dp_table[row][col] = max(dp_table[col][row - 1]
-                    # set value to that number
+                value_with = 0
 
-            # if dp_table[row - 1][col] or dp_table[row][col -1] > 0
-
+            value_without = dp_table[row - 1][col]
+            # first_item = items[0]
+            # value_with = first_item[2] + knapsack(items[1:], capacity - item_weight)
+            # value_without = (items[1:], capacity)
+            dp_table[row][col] = max(value_with, value_without)            
+            
     return dp_table[rows-1][cols-1]
+            
+            # elif diff >= 0:
+            #     # include it
+            #         # two table lookups
+            #         # check what is above it in the col
+            #         # either change the value to the number above it 
+            #         # or subtract the weight from the capacity and  
+            #         # check the resulting capacity column for the value 
+            #         # pick the max value of the two
+            #     dp_table[row][col] = max(dp_table[row - 1][col], dp_table[row][diff])
+            # # if it doesn't fit in the knapsack
+            # else:
+            #     # don't include it
+            #     # one table lookup
+            #     # check the number in in the row above (same column)
+            #     value_without = dp_table[row - 1][col]
+            #     value_with = 
+            #     dp_table[row][col] = max(dp_table[row - 1][col])
+            #         # set value to that number
+
+            # # if dp_table[row - 1][col] or dp_table[row][col -1] > 0
+
+    # return dp_table[rows-1][cols-1]
     
     
 def edit_distance(str1, str2):
@@ -145,7 +160,8 @@ def edit_distance_dp(str1, str2):
     # operations on last character of first string, recursively
     # compute minimum cost for all three operations and take
     # minimum of three values.
-    return 1 + min(edit_distance_dp(str1, str2[:-1]),   # Insert
+    else:    
+        return 1 + min(edit_distance_dp(str1, str2[:-1]),   # Insert
                    edit_distance_dp(str1[:-1], str2),   # Remove
                    edit_distance_dp(str1[:-1], str2[:-1])   # Replace
                 )
