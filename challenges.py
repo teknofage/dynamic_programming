@@ -78,28 +78,27 @@ def knapsack_dp(items, capacity):
                 dp_table[row][col] = 0
             # if the item fits in the knapsack
             current_capacity = col
-            if current_capacity - item_weight >= 0:
+            diff = current_capacity - item_weight
+            if diff >= 0:
                 # include it
                     # two table lookups
                     # check what is above it in the col
                     # either change the value to the number above it 
-                    # or subtract the weight from the capacity and 
-                    # check the resutlting capacity column for the value 
+                    # or subtract the weight from the capacity and  
+                    # check the resulting capacity column for the value 
                     # pick the max value of the two
+                dp_table[row][col] = max(dp_table[col][row - 1], dp_table[row][diff])
             # if it doesn't fit in the knapsack
             else:
-                # 
                 # don't include it
-                    # one table lookup
-                    # check the number in in the row above (same column)
+                # one table lookup
+                # check the number in in the row above (same column)
+                dp_table[row][col] = max(dp_table[col][row - 1]
                     # set value to that number
 
-                
-                
-            if dp_table[row - 1][col] or dp_table[row][col -1] > 0
-            
+            # if dp_table[row - 1][col] or dp_table[row][col -1] > 0
 
-            return dp_table[rows-1][cols-1]
+    return dp_table[rows-1][cols-1]
     
     
 def edit_distance(str1, str2):
