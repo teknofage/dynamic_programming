@@ -80,9 +80,23 @@ def knapsack_dp(items, capacity):
             # if the item fits in the knapsack
             
             if current_capacity >= item_weight:
+            # include it
+            #         # two table lookups
+            #         # check what is above it in the col
+            #         # either change the value to the number above it 
+            #         # or subtract the weight from the capacity and  
+            #         # check the resulting capacity column for the value 
+            #         # pick the max value of the two
                 value_with = item_value + dp_table[row-1][current_capacity - item_weight]
             else:
                 value_with = 0
+            # don't include it
+            #     # one table lookup
+            #     # check the number in in the row above (same column)
+            #     value_without = dp_table[row - 1][col]
+            #     value_with = 
+            #     dp_table[row][col] = max(dp_table[row - 1][col])
+            #         # set value to that number
 
             value_without = dp_table[row - 1][col]
             # first_item = items[0]
@@ -92,29 +106,6 @@ def knapsack_dp(items, capacity):
             
     return dp_table[rows-1][cols-1]
             
-            # elif diff >= 0:
-            #     # include it
-            #         # two table lookups
-            #         # check what is above it in the col
-            #         # either change the value to the number above it 
-            #         # or subtract the weight from the capacity and  
-            #         # check the resulting capacity column for the value 
-            #         # pick the max value of the two
-            #     dp_table[row][col] = max(dp_table[row - 1][col], dp_table[row][diff])
-            # # if it doesn't fit in the knapsack
-            # else:
-            #     # don't include it
-            #     # one table lookup
-            #     # check the number in in the row above (same column)
-            #     value_without = dp_table[row - 1][col]
-            #     value_with = 
-            #     dp_table[row][col] = max(dp_table[row - 1][col])
-            #         # set value to that number
-
-            # # if dp_table[row - 1][col] or dp_table[row][col -1] > 0
-
-    # return dp_table[rows-1][cols-1]
-    
     
 def edit_distance(str1, str2):
     """Compute the Edit Distance between 2 strings."""
@@ -145,25 +136,24 @@ def edit_distance_dp(str1, str2):
     cols = len(str2) + 1
     dp_table = [[0 for j in range(cols)] for i in range(rows)]
 
-    if len(str1) == 0 and len(str2) == 0:
-        return 0
-    if len(str1) == 0:
-        return len(str2)
-    if len(str2) == 0:
-        return len(str1)
-
-    # If last characters match
-    if str1[:-1] == str2[:]:
-        return edit_distance_dp(str1[:-1], str2[:-1])
- 
-    # If last characters are not same, consider all three
-    # operations on last character of first string, recursively
-    # compute minimum cost for all three operations and take
-    # minimum of three values.
-    else:    
-        return 1 + min(edit_distance_dp(str1, str2[:-1]),   # Insert
-                   edit_distance_dp(str1[:-1], str2),   # Remove
-                   edit_distance_dp(str1[:-1], str2[:-1])   # Replace
-                )
+    for row in range(rows):
+        for col in range(cols):
+            if row == 0:
+                dp_table[row][col] = col
+            elif col == 0:
+                dp_table[row][col] = row
+            # If last characters match
+            elif str1[row - 1] == str2[col - 1]:
+                dp_table[row][col] = dp_table[row - 1][col - 1]
+            else: 
+                # If last characters are not same, consider all three
+                # operations on last character of first string, 
+                # compute minimum cost for all three operations and take
+                # minimum of three values.
+                dp_table[row][col] = 1 + min(
+                    dp_table[row][col - 1],   # Insert
+                    dp_table[row - 1][col],   # Remove
+                    dp_table[row - 1][col - 1] # Replace
+                    )   
 
     return dp_table[rows-1][cols-1]
